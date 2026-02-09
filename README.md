@@ -1,18 +1,17 @@
-# CSV to ICS Calendar Converter
+# ...just convert - File Format Converter
 
-A modern web application built with Next.js that allows users to easily convert CSV files containing event data into ICS (iCalendar) format. Perfect for bulk importing events into calendar applications.
-
-![CSV to ICS Converter](public/preview.png)
+A modern web application built with Next.js that allows users to easily convert files between different formats. Currently supports CSV to ICS (iCalendar) conversion with plans to support more formats like JSON, Excel, PDF, and Markdown.
 
 ## Features
 
-- Modern UI with dark/light mode support
-- Drag & drop file upload
-- Real-time conversion progress
-- Supports multiple calendar fields
-- Interactive CSV format guide
-- Toast notifications for feedback
-- Responsive design
+- 🎨 Modern Neo-brutalist UI with dark/light mode support
+- 📁 Drag & drop file upload
+- 🔄 Real-time conversion
+- 📋 Supports multiple calendar fields
+- 📖 Interactive CSV format guide
+- 🔔 Toast notifications for feedback
+- 📱 Fully responsive design
+- 🎯 Type-safe with TypeScript
 
 ## Required CSV Format
 
@@ -61,21 +60,25 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Usage
 
-1. Visit the application in your web browser.
-2. Either drag & drop your CSV file or click to select it.
-3. Wait for the conversion process to complete.
-4. Download the generated ICS file.
-5. Import the ICS file into your preferred calendar application.
+1. Visit the application in your web browser
+2. Select source and target formats
+3. Either drag & drop your file or click to select it
+4. Click the "Convert" button
+5. Download the generated file automatically
 
 ## Tech Stack
 
-- [Next.js 14](https://nextjs.org/) - React framework
-- [TypeScript](https://www.typescriptlang.org/) - Type safety
-- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [Next.js 16](https://nextjs.org/) - React framework
+- [React 19](https://react.dev/) - UI library
+- [TypeScript 5](https://www.typescriptlang.org/) - Type safety
+- [Tailwind CSS 4](https://tailwindcss.com/) - Styling
 - [Shadcn/ui](https://ui.shadcn.com/) - UI components
+- [Radix UI](https://www.radix-ui.com/) - Accessible primitives
 - [csv-parse](https://csv.js.org/parse/) - CSV parsing
 - [ical-toolkit](https://www.npmjs.com/package/ical-toolkit) - ICS generation
 - [Sonner](https://sonner.emilkowal.ski/) - Toast notifications
+- [next-themes](https://github.com/pacocoursey/next-themes) - Theme management
+- [Lucide React](https://lucide.dev/) - Icon library
 
 ## Contributing
 

@@ -37,7 +37,7 @@ export function ConversionOptions({
     <div className="flex items-center gap-4 w-full">
       <Select value={sourceFormat} onValueChange={onSourceChange}>
         <SelectTrigger className="neo-brutal-box">
-          <SelectValue placeholder="Kaynak format" />
+          <SelectValue placeholder="Source format" />
         </SelectTrigger>
         <SelectContent>
           {FORMATS.map((format) => (
@@ -52,7 +52,7 @@ export function ConversionOptions({
 
       <Select value={targetFormat} onValueChange={onTargetChange}>
         <SelectTrigger className="neo-brutal-box">
-          <SelectValue placeholder="Hedef format" />
+          <SelectValue placeholder="Target format" />
         </SelectTrigger>
         <SelectContent>
           {FORMATS.map((format) => (

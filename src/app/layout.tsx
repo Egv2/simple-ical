@@ -2,15 +2,16 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "CSV to ICS Converter",
-  description: "Convert your CSV files to ICS calendar format easily",
+  title: "...just convert - File Format Converter",
+  description:
+    "Convert your files between different formats easily and quickly",
 };
 
 export default function RootLayout({
@@ -25,10 +26,8 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main className="dark:bg-gray-950 dark:text-white min-h-screen">
-            {children}
-          </main>
-          <Toaster theme="system" />
+          {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

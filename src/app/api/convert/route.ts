@@ -3,9 +3,6 @@ import { parse } from "csv-parse";
 import icalToolkit from "ical-toolkit";
 import dayjs from "dayjs";
 
-// Add console.log for debugging
-console.log("API route initialized");
-
 // CSV Record interface
 interface CsvRecord {
   title: string;
@@ -15,13 +12,13 @@ interface CsvRecord {
   location?: string;
 }
 
-// CSV validasyonu
+// CSV validation
 const validateCSV = (records: CsvRecord[]) => {
   const requiredColumns = ["title", "start", "end"];
   const firstRecord = records[0];
 
   const missingColumns = requiredColumns.filter(
-    (col) => !Object.keys(firstRecord).includes(col)
+    (col) => !Object.keys(firstRecord).includes(col),
   );
 
   if (missingColumns.length > 0) {
@@ -31,20 +28,16 @@ const validateCSV = (records: CsvRecord[]) => {
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("Received POST request");
     const data = await request.formData();
     const file = data.get("file") as File;
 
     if (!file) {
-      console.error("No file provided");
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    console.log("File received:", file.name, file.type);
     const csvText = await file.text();
-    console.log("CSV content sample:", csvText.substring(0, 100));
 
-    // CSV parsing
+    // Parse CSV
     const records = await new Promise<CsvRecord[]>((resolve, reject) => {
       parse(
         csvText,
@@ -55,25 +48,24 @@ export async function POST(request: NextRequest) {
         },
         (err, records) => {
           if (err) {
-            console.error("CSV parse error:", err);
             reject(err);
+          } else {
+            resolve(records);
           }
-          console.log("Parsed records:", records);
-          resolve(records);
-        }
+        },
       );
     });
 
     validateCSV(records);
 
-    // ICS builder
+    // Create ICS builder
     const builder = icalToolkit.createIcsFileBuilder();
 
     builder.calname = "My Calendar";
-    builder.timezone = "Europe/Istanbul";
+    builder.timezone = "UTC";
     builder.method = "PUBLISH";
 
-    // Events oluştur
+    // Create events
     (records as CsvRecord[]).forEach((record, index) => {
       const start = dayjs(record.start);
       const end = dayjs(record.end);
@@ -93,7 +85,7 @@ export async function POST(request: NextRequest) {
       });
     });
 
-    // ICS dosyası oluştur
+    // Generate ICS file
     const icsString = builder.toString();
 
     if (!icsString) {
@@ -107,10 +99,9 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("API error:", error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

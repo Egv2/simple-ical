@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
 import {
@@ -24,6 +24,7 @@ export function FileUpload({
   disabled,
 }: FileUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -41,9 +42,20 @@ export function FileUpload({
     setIsDragging(false);
 
     const droppedFile = e.dataTransfer.files?.[0];
-    if (droppedFile && acceptedFormats.includes(droppedFile.type)) {
+    if (droppedFile) {
       onFileSelect(droppedFile);
     }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      onFileSelect(selectedFile);
+    }
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
   };
 
   return (
@@ -51,7 +63,7 @@ export function FileUpload({
       className={cn(
         "border-2 border-dashed rounded-lg p-8 text-center transition-colors",
         isDragging ? "border-blue-500 bg-blue-50/50" : "border-gray-300",
-        disabled && "opacity-50 cursor-not-allowed"
+        disabled && "opacity-50 cursor-not-allowed",
       )}
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
@@ -59,10 +71,11 @@ export function FileUpload({
       onDrop={handleDrop}
     >
       <input
+        ref={fileInputRef}
         type="file"
         accept=".csv"
         className="hidden"
-        onChange={(e) => e.target.files?.[0] && onFileSelect(e.target.files[0])}
+        onChange={handleFileChange}
         disabled={disabled}
       />
       <div className="space-y-2">
@@ -74,16 +87,14 @@ export function FileUpload({
           </p>
         )}
         <p className="text-sm text-gray-500">
-          CSV dosyanızı sürükleyip bırakın veya{" "}
+          Drag and drop your CSV file or{" "}
           <button
+            type="button"
             className="text-blue-500 hover:text-blue-700 font-medium"
-            onClick={() => {
-              console.log("Dosya seçim tetiklendi");
-              document.querySelector("input")?.click();
-            }}
+            onClick={handleButtonClick}
             disabled={disabled}
           >
-            seçin
+            select
           </button>
         </p>
       </div>
@@ -91,9 +102,12 @@ export function FileUpload({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <button className="text-sm text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1 mx-auto">
+              <button
+                type="button"
+                className="text-sm text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1 mx-auto"
+              >
                 <Info className="w-4 h-4" />
-                <span>CSV format detayları</span>
+                <span>CSV format details</span>
               </button>
             </TooltipTrigger>
             <TooltipContent
@@ -101,19 +115,19 @@ export function FileUpload({
               className="bg-white border border-gray-200 rounded-xl shadow-lg p-4 w-[320px]"
             >
               <div className="space-y-2">
-                <h4 className="font-semibold text-sm">Örnek CSV Formatı</h4>
+                <h4 className="font-semibold text-sm">Sample CSV Format</h4>
                 <div className="border rounded-lg overflow-hidden">
                   <table className="w-full text-[13px]">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="p-2 text-left font-medium">Başlık</th>
-                        <th className="p-2 text-left font-medium">Örnek</th>
+                        <th className="p-2 text-left font-medium">Field</th>
+                        <th className="p-2 text-left font-medium">Example</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr className="border-t">
                         <td className="p-2">title*</td>
-                        <td className="p-2">Takım Toplantısı</td>
+                        <td className="p-2">Team Meeting</td>
                       </tr>
                       <tr className="border-t">
                         <td className="p-2">start*</td>
@@ -125,12 +139,12 @@ export function FileUpload({
                       </tr>
                       <tr className="border-t">
                         <td className="p-2">description</td>
-                        <td className="p-2">Haftalık değerlendirme</td>
+                        <td className="p-2">Weekly review</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">* Zorunlu alanlar</p>
+                <p className="text-xs text-gray-500 mt-2">* Required fields</p>
               </div>
             </TooltipContent>
           </Tooltip>

@@ -16,26 +16,40 @@ export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [isConverting, setIsConverting] = useState(false);
 
-  console.log("Render: Home component");
-
   const handleConvert = async () => {
     if (!file) return;
 
     try {
-      console.log("Starting conversion:", {
-        sourceFormat,
-        targetFormat,
-        fileName: file.name,
-      });
       setIsConverting(true);
 
-      // API call will be implemented here
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Temporary simulation
+      const formData = new FormData();
+      formData.append("file", file);
 
-      toast.success("Dosya başarıyla dönüştürüldü!");
+      const response = await fetch("/api/convert", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Conversion failed");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `converted.${targetFormat}`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+
+      toast.success("File converted successfully!");
     } catch (error) {
-      console.error("Conversion error:", error);
-      toast.error("Dönüştürme sırasında bir hata oluştu!");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "An error occurred during conversion!",
+      );
     } finally {
       setIsConverting(false);
     }
@@ -53,7 +67,7 @@ export default function Home() {
           />
         </h1>
         <p className="text-lg text-muted-foreground border-2 border-black dark:border-white inline-block px-4 py-1 neo-brutal-box font-mono">
-          dosya formatı dönüştürücü
+          file format converter
         </p>
       </div>
 
@@ -82,10 +96,10 @@ export default function Home() {
           className="w-full h-14 text-lg neo-brutal-button"
         >
           {isConverting ? (
-            "Dönüştürülüyor..."
+            "Converting..."
           ) : (
             <>
-              Dönüştür <ArrowRight className="ml-2" />
+              Convert <ArrowRight className="ml-2" />
             </>
           )}
         </Button>
