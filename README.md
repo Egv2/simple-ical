@@ -6,13 +6,13 @@ A modern web application built with Next.js that allows users to easily convert 
 
 ## Features
 
-- 🚀 Modern UI with dark/light mode support
-- 📁 Drag & drop file upload
-- 📊 Real-time conversion progress
-- 📅 Supports multiple calendar fields
-- 💡 Interactive CSV format guide
-- 🔔 Toast notifications for feedback
-- 📱 Responsive design
+- Modern UI with dark/light mode support
+- Drag & drop file upload
+- Real-time conversion progress
+- Supports multiple calendar fields
+- Interactive CSV format guide
+- Toast notifications for feedback
+- Responsive design
 
 ## Required CSV Format
 
@@ -38,7 +38,7 @@ The CSV file must include these columns:
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone www.github.com/egv2/simple-ical
 ```
 
 2. Install dependencies:
