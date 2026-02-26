@@ -1,7 +1,5 @@
 "use client";
 
-type SupportedFormats = "csv" | "json" | "xlsx" | "ics" | "pdf" | "md";
-
 import {
   Select,
   SelectContent,
@@ -10,21 +8,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ArrowRight } from "lucide-react";
-
-const FORMATS = [
-  { value: "csv" as SupportedFormats, label: "CSV" },
-  { value: "json" as SupportedFormats, label: "JSON" },
-  { value: "xlsx" as SupportedFormats, label: "Excel" },
-  { value: "ics" as SupportedFormats, label: "iCalendar" },
-  { value: "pdf" as SupportedFormats, label: "PDF" },
-  { value: "md" as SupportedFormats, label: "Markdown" },
-];
+import type { SupportedFormat } from "@/lib/converters/types";
+import {
+  FORMAT_META,
+  getSourceFormats,
+  getValidTargets,
+  getDefaultTarget,
+} from "@/lib/converters/registry";
 
 interface ConversionOptionsProps {
-  sourceFormat: SupportedFormats;
-  targetFormat: SupportedFormats;
-  onSourceChange: (format: SupportedFormats) => void;
-  onTargetChange: (format: SupportedFormats) => void;
+  sourceFormat: SupportedFormat;
+  targetFormat: SupportedFormat;
+  onSourceChange: (format: SupportedFormat) => void;
+  onTargetChange: (format: SupportedFormat) => void;
 }
 
 export function ConversionOptions({
@@ -33,16 +29,34 @@ export function ConversionOptions({
   onSourceChange,
   onTargetChange,
 }: ConversionOptionsProps) {
+  const sourceFormats = getSourceFormats();
+  const validTargets = getValidTargets(sourceFormat);
+
+  const handleSourceChange = (value: string) => {
+    const newSource = value as SupportedFormat;
+    onSourceChange(newSource);
+
+    // Auto-switch target if current target is invalid for new source
+    const newValidTargets = getValidTargets(newSource);
+    if (!newValidTargets.includes(targetFormat)) {
+      onTargetChange(getDefaultTarget(newSource));
+    }
+  };
+
+  const handleTargetChange = (value: string) => {
+    onTargetChange(value as SupportedFormat);
+  };
+
   return (
     <div className="flex items-center gap-4 w-full">
-      <Select value={sourceFormat} onValueChange={onSourceChange}>
+      <Select value={sourceFormat} onValueChange={handleSourceChange}>
         <SelectTrigger className="neo-brutal-box">
           <SelectValue placeholder="Source format" />
         </SelectTrigger>
         <SelectContent>
-          {FORMATS.map((format) => (
-            <SelectItem key={format.value} value={format.value}>
-              {format.label}
+          {sourceFormats.map((format) => (
+            <SelectItem key={format} value={format}>
+              {FORMAT_META[format].label}
             </SelectItem>
           ))}
         </SelectContent>
@@ -50,14 +64,14 @@ export function ConversionOptions({
 
       <ArrowRight className="flex-shrink-0" />
 
-      <Select value={targetFormat} onValueChange={onTargetChange}>
+      <Select value={targetFormat} onValueChange={handleTargetChange}>
         <SelectTrigger className="neo-brutal-box">
           <SelectValue placeholder="Target format" />
         </SelectTrigger>
         <SelectContent>
-          {FORMATS.map((format) => (
-            <SelectItem key={format.value} value={format.value}>
-              {format.label}
+          {validTargets.map((format) => (
+            <SelectItem key={format} value={format}>
+              {FORMAT_META[format].label}
             </SelectItem>
           ))}
         </SelectContent>

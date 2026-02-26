@@ -1,29 +1,17 @@
 # ...just convert - File Format Converter
 
-A modern web application built with Next.js that allows users to easily convert files between different formats. Currently supports CSV to ICS (iCalendar) conversion with plans to support more formats like JSON, Excel, PDF, and Markdown.
+Next.js app that allows users to easily convert files between different formats. Currently supports CSV to ICS (iCalendar) conversion with plans to support more formats like JSON, Excel, PDF, and Markdown.
 
 ## Features
 
-- 🎨 Modern Neo-brutalist UI with dark/light mode support
-- 📁 Drag & drop file upload
-- 🔄 Real-time conversion
-- 📋 Supports multiple calendar fields
-- 📖 Interactive CSV format guide
-- 🔔 Toast notifications for feedback
-- 📱 Fully responsive design
-- 🎯 Type-safe with TypeScript
-
-## Required CSV Format
-
-The CSV file must include these columns:
-
-| Field       | Required | Example               | Description                   |
-| ----------- | -------- | --------------------- | ----------------------------- |
-| title       | ✅       | Team Meeting          | Event title                   |
-| start       | ✅       | 2024-03-20T14:30      | Start date and time           |
-| end         | ✅       | 2024-03-20T15:30      | End date and time             |
-| description | ❌       | Weekly review meeting | Optional event description    |
-| location    | ❌       | Conference Room 1     | Optional location information |
+- Modern Neo-brutalist UI with dark/light mode support
+- Drag & drop file upload
+- Real-time conversion
+- Supports multiple calendar fields
+- Interactive CSV format guide
+- Toast notifications for feedback
+- Fully responsive design
+- Type-safe with TypeScript
 
 ## Getting Started
 
